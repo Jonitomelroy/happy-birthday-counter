@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avril's Birthday Countdown</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #667eea 100%); /* Original Pink to Blue gradient */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow-x: hidden;
+            padding: 1rem;
+        }
+
+        .container {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            margin: 1rem auto;
+        }
+
+        .header {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .birthday-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            position: relative;
+        }
+
+        .birthday-image::before {
+            content: '❤️';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-size: 1.5rem;
+            z-index: 2;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        .birthday-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(45deg, #ff6b6b, #ffe66d, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .special-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffe66d;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin: 0.5rem 0;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .birthday-date {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin: 2rem 0;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 1.2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .countdown-item:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .countdown-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .message-container {
+            margin: 2rem 0;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1.2rem;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .message {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .birthday-celebration {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffe66d;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+            margin: 1rem 0;
+            animation: celebrate 1s ease-in-out infinite alternate;
+            display: none;
+        }
+
+        .romantic-quote {
+            font-style: italic;
+            margin-top: 1rem;
+            opacity: 0.9;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            top: 0;
+            left: 0;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: floatHeart 20s infinite ease-in-out;
+            opacity: 0.6;
+        }
+
+        .heart:nth-child(1) { left: 5%; animation-delay: 0s; color: #ff6b6b; }
+        .heart:nth-child(2) { left: 20%; animation-delay: 3s; color: #ffe66d; }
+        .heart:nth-child(3) { left: 40%; animation-delay: 6s; color: #4ecdc4; }
+        .heart:nth-child(4) { left: 60%; animation-delay: 9s; color: #6a0572; }
+        .heart:nth-child(5) { left: 80%; animation-delay: 12s; color: #ff9a8b; }
+
+        @keyframes floatHeart {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(-100vh) rotate(180deg);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #fff, 0 0 10px #ffe66d, 0 0 15px #ff6b6b; }
+            to { text-shadow: 0 0 10px #fff, 0 0 20px #ffe66d, 0 0 30px #ff6b6b; }
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Mobile-specific optimizations */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.2rem;
+                margin: 0.5rem;
+            }
+            
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            .special-name {
+                font-size: 1.5rem;
+            }
+            
+            .birthday-image {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .countdown {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            
+            .countdown-item {
+                padding: 1rem;
+            }
+            
+            .countdown-number {
+                font-size: 1.8rem;
+            }
+            
+            .countdown-label {
+                font-size: 0.8rem;
+            }
+            
+            .message {
+                font-size: 1.1rem;
+            }
+            
+            .birthday-celebration {
+                font-size: 1.5rem;
+            }
+            
+            .romantic-quote {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 320px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .special-name {
+                font-size: 1.3rem;
+            }
+            
+            .countdown-number {
+                font-size: 1.6rem;
+            }
+            
+            .message {
+                font-size: 1rem;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        .countdown-item {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts">
+        <div class="heart">❤️</div>
+        <div class="heart">❤️</div>
+        <div class="heart">❤️</div>
+        <div class="heart">❤️</div>
+        <div class="heart">❤️</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="birthday-image">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/938fcae8-5d0a-4a4e-8b5d-ff0b7bc03e27.png" alt="Beautiful portrait of Avril with a warm smile, wearing a birthday hat and surrounded by soft glowing lights" />
+            </div>
+            <h1>🎂 Birthday Countdown 🎂</h1>
+            <div class="special-name">For Avril 💖</div>
+            <div class="birthday-date" id="birthdayDate">September 11, 2025</div>
+        </div>
+
+        <div class="countdown">
+            <div class="countdown-item">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
+
+        <div class="message-container">
+            <div class="message" id="message">
+                Counting down to Avril's special day! Every moment brings us closer to celebrating you! ✨
+            </div>
+            <div class="birthday-celebration" id="birthdayCelebration">
+                🎉 HAPPY BIRTHDAY AVRIL! 🎉
+            </div>
+        </div>
+        
+        <div class="romantic-quote">
+            "Some hearts are meant to be together... and ours is one of them 💫"
+        </div>
+    </div>
+
+    <script>
+        // Set the birthday date for Avril (format: Month Day, Year)
+        const birthdayDate = new Date('September 11, 2025 00:00:00').getTime();
+        const birthdayCelebration = document.getElementById('birthdayCelebration');
+        const messageElement = document.getElementById('message');
+        
+        // Update the countdown every second
+        const countdown = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = birthdayDate - now;
+            
+            // Calculate days, hours, minutes, seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Display the results
+            document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+            
+            // Update romantic messages based on time remaining
+            updateRomanticMessage(days, hours);
+            
+            // If the countdown is finished
+            if (distance < 0) {
+                clearInterval(countdown);
+                document.getElementById("days").innerHTML = "00";
+                document.getElementById("hours").innerHTML = "00";
+                document.getElementById("minutes").innerHTML = "00";
+                document.getElementById("seconds").innerHTML = "00";
+                
+                // Show the clear birthday celebration message
+                birthdayCelebration.style.display = 'block';
+                messageElement.innerHTML = "Today is all about you! My heart is celebrating with you! 💖";
+                
+                // Add celebration effects
+                document.body.style.background = "linear-gradient(135deg, #ff6b6b 0%, #ffe66d 50%, #4ecdc4 100%)";
+                startBirthdayCelebration();
+            }
+        }, 1000);
+
+        function updateRomanticMessage(days, hours) {
+            const messages = [
+                "Every second brings me closer to celebrating you, Avril 💖",
+                "Counting the moments until I can wish you Happy Birthday ✨",
+                "My heart beats in rhythm with this countdown for you 🎶",
+                "Avril, you make every day feel like a celebration 🌟",
+                "Can't wait to see your beautiful smile on your special day 😊"
+            ];
+            
+            if (days === 0 && hours < 24) {
+                messageElement.innerHTML = "Almost there! Just a few hours until your birthday, Avril! My excitement is through the roof! 🚀";
+            } else if (days === 1) {
+                messageElement.innerHTML = "Only one more day until your birthday, Avril! My heart is racing with anticipation! 💓";
+            } else {
+                // Change message every 30 seconds
+                const messageIndex = Math.floor(Date.now() / 30000) % messages.length;
+                messageElement.innerHTML = messages[messageIndex];
+            }
+        }
+
+        function startBirthdayCelebration() {
+            // Create more hearts for celebration
+            for (let i = 0; i < 15; i++) {
+                createFloatingHeart();
+            }
+            
+            // Continuous celebration effects
+            setInterval(createRomanticConfetti, 1500);
+            
+            // Pulsating celebration effect
+            setInterval(() => {
+                birthdayCelebration.style.transform = birthdayCelebration.style.transform === 'scale(1.1)' ? 'scale(1)' : 'scale(1.1)';
+            }, 500);
+        }
+
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.cssText = `
+                position: fixed;
+                font-size: ${1.5 + Math.random() * 2}rem;
+                left: ${Math.random() * 100}%;
+                animation: floatHeart ${12 + Math.random() * 8}s infinite ease-in-out;
+                color: ${['#ff6b6b', '#ffe66d', '#4ecdc4', '#6a0572', '#ff9a8b'][Math.floor(Math.random() * 5)]};
+                opacity: ${0.4 + Math.random() * 0.4};
+                z-index: 1000;
+                pointer-events: none;
+            `;
+            document.body.appendChild(heart);
+        }
+
+        function createRomanticConfetti() {
+            const romanticSymbols = ['❤️', '💖', '💕', '✨', '🌟', '🎂', '🎉'];
+            const colors = ['#ff6b6b', '#ffe66d', '#4ecdc4', '#6a0572', '#ff9a8b'];
+            
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.innerHTML = romanticSymbols[Math.floor(Math.random() * romanticSymbols.length)];
+                confetti.style.cssText = `
+                    position: fixed;
+                    font-size: ${1.2 + Math.random() * 1.5}rem;
+                    top: -40px;
+                    left: ${Math.random() * 100}%;
+                    animation: romanticFall ${2 + Math.random() * 3}s linear forwards;
+                    z-index: 1000;
+                    pointer-events: none;
+                    color: ${colors[Math.floor(Math.random() * colors.length)]};
+                    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+                `;
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Add romantic fall animation
+        if (!document.querySelector('style#romantic-fall')) {
+            const style = document.createElement('style');
+            style.id = 'romantic-fall';
+            style.textContent = `
+                @keyframes romanticFall {
+                    0% {
+                        transform: translateY(0) rotate(0deg) scale(0.5);
+                        opacity: 0;
+                    }
+                    10% {
+                        opacity: 1;
+                    }
+                    90% {
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: translateY(100vh) rotate(${360 + Math.random() * 360}deg) scale(1.1);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Touch interaction for mobile
+        document.addEventListener('touchstart', function() {
+            createRomanticConfetti();
+            createFloatingHeart();
+        });
+
+        // Hover effects for countdown items (also works on mobile with touch)
+        document.addEventListener('DOMContentLoaded', function() {
+            const countdownItems = document.querySelectorAll('.countdown-item');
+            
+            countdownItems.forEach(item => {
+                item.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(1.05) translateY(-3px)';
+                    this.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.2)';
+                });
+                
+                item.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1) translateY(0)';
+                    this.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.15)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
