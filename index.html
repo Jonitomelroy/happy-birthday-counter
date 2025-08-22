@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ff6b6b 0%, #667eea 100%); /* Original Pink to Blue gradient */
+            background: linear-gradient(135deg, #ff6b6b 0%, #667eea 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -52,16 +52,6 @@
             position: relative;
         }
 
-        .birthday-image::before {
-            content: '❤️';
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            font-size: 1.5rem;
-            z-index: 2;
-            animation: heartbeat 1.5s infinite;
-        }
-
         .birthday-image img {
             width: 100%;
             height: 100%;
@@ -85,7 +75,6 @@
             color: #ffe66d;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             margin: 0.5rem 0;
-            animation: glow 2s ease-in-out infinite alternate;
         }
 
         .birthday-date {
@@ -165,6 +154,23 @@
             line-height: 1.4;
         }
 
+        #playButton {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: #ffe66d;
+            border: none;
+            border-radius: 5px;
+            color: #333;
+            transition: background-color 0.3s;
+        }
+
+        #playButton:hover {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
         .hearts {
             position: fixed;
             width: 100%;
@@ -197,16 +203,6 @@
                 transform: translateY(-100vh) rotate(180deg);
                 opacity: 0.7;
             }
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 5px #fff, 0 0 10px #ffe66d, 0 0 15px #ff6b6b; }
-            to { text-shadow: 0 0 10px #fff, 0 0 20px #ffe66d, 0 0 30px #ff6b6b; }
         }
 
         @keyframes celebrate {
@@ -337,9 +333,15 @@
         </div>
         
         <div class="romantic-quote">
-            "Some hearts are meant to be together... and ours is one of them 💫"
+            "If roasting each other was a sport, we’d be world champions 🏆🔥"
         </div>
+
+        <!-- Play button for the birthday song -->
+        <button id="playButton">Play Birthday Song</button>
     </div>
+
+    <!-- Audio element for the birthday song -->
+    <audio id="birthdaySong" src="Best Day Of My Life.mp3" preload="auto"></audio>
 
     <script>
         // Set the birthday date for Avril (format: Month Day, Year)
@@ -347,6 +349,17 @@
         const birthdayCelebration = document.getElementById('birthdayCelebration');
         const messageElement = document.getElementById('message');
         
+        // Function to play the birthday song
+        function playBirthdaySong() {
+            const birthdaySong = document.getElementById('birthdaySong');
+            birthdaySong.play().catch(error => {
+                console.error("Error playing audio:", error);
+            });
+        }
+
+        // Add event listener to the play button
+        document.getElementById('playButton').addEventListener('click', playBirthdaySong);
+
         // Update the countdown every second
         const countdown = setInterval(function() {
             const now = new Date().getTime();
@@ -379,9 +392,8 @@
                 birthdayCelebration.style.display = 'block';
                 messageElement.innerHTML = "Today is all about you! My heart is celebrating with you! 💖";
                 
-                // Add celebration effects
-                document.body.style.background = "linear-gradient(135deg, #ff6b6b 0%, #ffe66d 50%, #4ecdc4 100%)";
-                startBirthdayCelebration();
+                // Play the birthday song
+                playBirthdaySong();
             }
         }, 1000);
 
@@ -389,7 +401,7 @@
             const messages = [
                 "Every second brings me closer to celebrating you, Avril 💖",
                 "Counting the moments until I can wish you Happy Birthday ✨",
-                "My heart beats in rhythm with this countdown for you 🎶",
+                "Our friendship is like a countdown—starts with drama, ends with laughter ⏳🤣",
                 "Avril, you make every day feel like a celebration 🌟",
                 "Can't wait to see your beautiful smile on your special day 😊"
             ];
@@ -514,3 +526,4 @@
     </script>
 </body>
 </html>
+
